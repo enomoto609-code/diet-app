@@ -6,8 +6,14 @@ import json
 from PIL import Image
 import datetime
 
-# --- 簡単な合言葉認証 ---
-# セッション状態を使って、一度ログインしたらブラウザを閉じるまで保持する
+# --- 1. ページ設定（※必ず最初に呼び出す必要があります） ---
+st.set_page_config(
+    page_title="食事管理・栄養分析アプリ",
+    page_icon="🥗",
+    layout="centered"
+)
+
+# --- 2. 簡単な合言葉認証 ---
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
@@ -18,7 +24,7 @@ if not st.session_state.authenticated:
     # パスワード入力フォーム（文字が伏せ字になります）
     password_input = st.text_input("合言葉を入力", type="password")
     
-    # Streamlit Cloudの Secrets からパスワードを読み込む（設定されていない場合は "default_password"）
+    # Streamlit Cloudの Secrets からパスワードを読み込む
     CORRECT_PASSWORD = st.secrets.get("APP_PASSWORD", "default_password")
     
     if st.button("ログイン"):
@@ -28,23 +34,14 @@ if not st.session_state.authenticated:
         else:
             st.error("合言葉が違います。")
             
-    # 認証されていない場合はここで処理をストップし、メインの中身を表示しない
+    # 認証されていない場合はここで処理をストップ
     st.stop()
 
 # ==========================================
-# 以降にこれまでのメインのアプリ処理を続ける
+# 以降に認証後のメインのアプリ処理が続きます
 # ==========================================
-st.title("🥗 AI食事管理・栄養分析アプリ")
-# 1. ページ設定（スマホで見やすいレイアウト）
-st.set_page_config(
-    page_title="食事管理・栄養分析アプリ",
-    page_icon="🥗",
-    layout="centered"
-)
-
 st.title("🥗 食事記録 ＆ 栄養分析")
 st.write("食事の写真を撮影またはアップロードして、AI分析とスプレッドシート記録を行います。")
-
 # 2. 秘密情報（APIキー）の読み込み設定
 # ※ローカルでテストする際は、st.secretsの代わりにサイドバー等で入力を受け付けるか、
 # 後述する .streamlit/secrets.toml を使いますが、まずはコード内に直接設定してテストすることも可能です。
