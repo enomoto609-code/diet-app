@@ -1,4 +1,10 @@
 import streamlit as st
+from google import genai
+from google.genai import types
+import gspread
+import json
+from PIL import Image
+import datetime
 
 # --- 簡単な合言葉認証 ---
 # セッション状態を使って、一度ログインしたらブラウザを閉じるまで保持する
@@ -12,8 +18,8 @@ if not st.session_state.authenticated:
     # パスワード入力フォーム（文字が伏せ字になります）
     password_input = st.text_input("合言葉を入力", type="password")
     
-    # ここにお好みの合言葉を設定してください（例: "my_diet_2026" など）
-    CORRECT_PASSWORD = "your_secret_password" 
+    # Streamlit Cloudの Secrets からパスワードを読み込む（設定されていない場合は "default_password"）
+    CORRECT_PASSWORD = st.secrets.get("APP_PASSWORD", "default_password")
     
     if st.button("ログイン"):
         if password_input == CORRECT_PASSWORD:
@@ -29,16 +35,6 @@ if not st.session_state.authenticated:
 # 以降にこれまでのメインのアプリ処理を続ける
 # ==========================================
 st.title("🥗 AI食事管理・栄養分析アプリ")
-# （これまでに書いた app.py のコードがここに続く形になります）
-
-import streamlit as st
-from google import genai
-from google.genai import types
-import gspread
-import json
-from PIL import Image
-import datetime
-
 # 1. ページ設定（スマホで見やすいレイアウト）
 st.set_page_config(
     page_title="食事管理・栄養分析アプリ",
