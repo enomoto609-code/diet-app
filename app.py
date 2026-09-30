@@ -1,4 +1,37 @@
 import streamlit as st
+
+# --- 簡単な合言葉認証 ---
+# セッション状態を使って、一度ログインしたらブラウザを閉じるまで保持する
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+
+if not st.session_state.authenticated:
+    st.title("🔒 ログイン認証")
+    st.write("このアプリを利用するには合言葉を入力してください。")
+    
+    # パスワード入力フォーム（文字が伏せ字になります）
+    password_input = st.text_input("合言葉を入力", type="password")
+    
+    # ここにお好みの合言葉を設定してください（例: "my_diet_2026" など）
+    CORRECT_PASSWORD = "your_secret_password" 
+    
+    if st.button("ログイン"):
+        if password_input == CORRECT_PASSWORD:
+            st.session_state.authenticated = True
+            st.rerun() # 画面を再読み込みしてメインアプリを表示
+        else:
+            st.error("合言葉が違います。")
+            
+    # 認証されていない場合はここで処理をストップし、メインの中身を表示しない
+    st.stop()
+
+# ==========================================
+# 以降にこれまでのメインのアプリ処理を続ける
+# ==========================================
+st.title("🥗 AI食事管理・栄養分析アプリ")
+# （これまでに書いた app.py のコードがここに続く形になります）
+
+import streamlit as st
 from google import genai
 from google.genai import types
 import gspread
