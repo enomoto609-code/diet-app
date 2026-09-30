@@ -2,7 +2,6 @@ import streamlit as st
 from google import genai
 from google.genai import types
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 import json
 from PIL import Image
 import datetime
